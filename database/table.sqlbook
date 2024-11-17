@@ -1,0 +1,7 @@
+-- SQLBook: Code
+CREATE TABLE characters (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    character_name VARCHAR(100),
+    category VARCHAR(50),
+    traits JSON
+);
