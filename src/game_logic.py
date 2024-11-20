@@ -1,9 +1,9 @@
 import joblib
-from db_quries2 import fetch_all_characters
+from db_quries import fetch_all_characters
 import pandas as pd
 
 # Load the trained model
-model = joblib.load('src/model_training.py')
+model = joblib.load('src/question_selector_model.pkl')
 
 # Function to dynamically select the best question
 def dynamic_question_selection(characters):
