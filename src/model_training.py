@@ -13,34 +13,32 @@ DATABASE_URI = 'mysql+mysqlconnector://root:200103@localhost:3306/akinator'
 engine = create_engine(DATABASE_URI)
 
 def load_character_data():
-    # Query character data from the database
     query = "SELECT character_name, traits FROM person"
     with engine.connect() as connection:
         data = pd.read_sql(query, connection)
 
-    # Convert stringified list to an actual Python list
     def parse_traits(traits_string):
         try:
-            # Use `ast.literal_eval` to safely evaluate the string
             parsed_traits = ast.literal_eval(traits_string)
-            # Flatten the nested structure if needed and remove quotes/spaces
             return [trait.strip(" '\"") for trait in parsed_traits]
         except Exception as e:
             print(f"Error parsing traits: {traits_string} - {e}")
             return []
-    
-    # Apply parsing function
+
     data['parsed_traits'] = data['traits'].apply(parse_traits)
 
-    # Create one-hot encoded columns for traits
+    # Collect all unique traits
     all_traits = set(trait for traits in data['parsed_traits'] for trait in traits)
+
+    # Create one-hot encoded columns for traits
     for trait in all_traits:
         data[trait] = data['parsed_traits'].apply(lambda x: 1 if trait in x else 0)
 
-    # print("Expanded Data Columns:", data.columns)
-    print("Expanded Data Sample:")
+    print("Sample of Expanded Data:")
     print(data.head())
+
     return data.drop(columns=['traits', 'parsed_traits'])
+
 
 # Load data from the database
 data = load_character_data()
@@ -80,9 +78,9 @@ if 'question' not in training_data.columns:
 X = pd.get_dummies(training_data[['question']])  # One-hot encode the 'question' column
 y = training_data['effective']
 
-# Debugging output for one-hot encoding
-# print("One-Hot Encoded Feature Matrix (X):")
-# print(X.head())
+#Debugging output for one-hot encoding
+print("One-Hot Encoded Feature Matrix (X):")
+print(X.head())
 
 # Split into training and test sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -99,3 +97,9 @@ print(f"Model Accuracy: {accuracy:.2f}")
 # Save the model to a file
 joblib.dump(model, 'src/question_selector_model.pkl')
 print("Model saved successfully!")
+
+#print(training_data['effective'].value_counts())
+
+
+
+
