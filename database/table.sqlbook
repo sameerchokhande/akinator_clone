@@ -5,3 +5,15 @@ CREATE TABLE characters (
     category VARCHAR(50),
     traits JSON
 );
+
+-- SQLBook: Code
+UPDATE person
+SET traits = '["is_male", "is_actor"]'
+WHERE id = 19950;
+-- SQLBook: Code
+UPDATE person
+SET traits = '["is_male", "is_actor"]'
+WHERE id = 49870
+-- SQLBook: Code
+UPDATE person
+SET traits = '["is_male", "is_actor"]'

@@ -13,9 +13,6 @@ DATABASE_URI = 'mysql+mysqlconnector://root:200103@localhost:3306/akinator'
 engine = create_engine(DATABASE_URI)
 
 def load_character_data():
-    """
-    Load character data from the database and expand traits from a stringified list to one-hot columns.
-    """
     # Query character data from the database
     query = "SELECT character_name, traits FROM person"
     with engine.connect() as connection:
@@ -31,7 +28,7 @@ def load_character_data():
         except Exception as e:
             print(f"Error parsing traits: {traits_string} - {e}")
             return []
-
+    
     # Apply parsing function
     data['parsed_traits'] = data['traits'].apply(parse_traits)
 
@@ -40,7 +37,7 @@ def load_character_data():
     for trait in all_traits:
         data[trait] = data['parsed_traits'].apply(lambda x: 1 if trait in x else 0)
 
-    print("Expanded Data Columns:", data.columns)
+    # print("Expanded Data Columns:", data.columns)
     print("Expanded Data Sample:")
     print(data.head())
     return data.drop(columns=['traits', 'parsed_traits'])
@@ -67,7 +64,7 @@ def create_training_data(data):
 
     # Convert rows to a DataFrame
     training_data = pd.DataFrame(training_rows)
-    print("Training Data Columns:", training_data.columns)
+    # print("Training Data Columns:", training_data.columns)
     print("Training Data Sample:")
     print(training_data.head())
     return training_data
@@ -84,8 +81,8 @@ X = pd.get_dummies(training_data[['question']])  # One-hot encode the 'question'
 y = training_data['effective']
 
 # Debugging output for one-hot encoding
-print("One-Hot Encoded Feature Matrix (X):")
-print(X.head())
+# print("One-Hot Encoded Feature Matrix (X):")
+# print(X.head())
 
 # Split into training and test sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)

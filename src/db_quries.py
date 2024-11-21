@@ -1,39 +1,42 @@
 import pandas as pd
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
+import ast
+from sqlalchemy.sql import text
 import json
 
+# Database connection URI for MySQL
 DATABASE_URI = 'mysql+mysqlconnector://root:200103@localhost:3306/akinator'
+
+# Connect to the database
 engine = create_engine(DATABASE_URI)
 
-# Fetch all characters
-def fetch_all_characters():
-    try:
-        with engine.connect() as connection:
-            result = connection.execute(text("SELECT * FROM person"))
-            # Convert the result to a list of dictionaries
-            characters = [dict(row) for row in result.fetchall()]  # Ensure fetchall is used
-        return characters
-    except Exception as e:
-        print(f"Error fetching all characters: {e}")
-        return []
 
-# Filter characters by traits
-def fetch_characters_by_traits(traits):
-    try:
-        with engine.connect() as connection:
-            # Ensure traits is a valid JSON object before passing it to the query
-            if isinstance(traits, dict):
-                traits = json.dumps(traits)
-            query = text("""
-                SELECT * FROM person  
-                WHERE JSON_CONTAINS(traits, :traits)
-            """)
-            result = connection.execute(query, {"traits": traits})
-            # Convert the result to a list of dictionaries
-            characters = [dict(row) for row in result.fetchall()]  # Ensure fetchall is used
-        return characters
-    except Exception as e:
-        print(f"Error filtering characters by traits: {e}")
-        return []
+def fetch_all_characters():
+    """
+    Fetch all characters from the database and parse their traits.
+    """
+    query = text("SELECT character_name, traits FROM person")  # Wrap the query in text()
+    with engine.connect() as connection:
+        result = connection.execute(query).mappings().fetchall()  # Use mappings() for dict-like rows
+
+    characters = []
+    for row in result:
+        character_name = row['character_name']  # Access by key since rows are dicts
+        try:
+            # Parse traits from JSON string
+            traits = json.loads(row['traits'])
+            characters.append({'character_name': character_name, 'traits': traits})
+        except json.JSONDecodeError:
+            print(f"Error decoding traits for {character_name}: {row['traits']}")
+
+    # Debugging: Check loaded characters
+    # print("Loaded Characters:", characters)
+    return characters
+
+# Fetch characters from the database
 characters = fetch_all_characters()
-print(characters)
+
+if not characters:
+    print("No characters were loaded from the database.")
+else:
+    print("Characters successfully loaded.")
