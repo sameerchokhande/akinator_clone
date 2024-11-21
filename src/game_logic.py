@@ -1,14 +1,10 @@
 import joblib
 from db_quries import fetch_all_characters
 import pandas as pd
+from model_training import load_character_data
 
 # Load the trained model
 model = joblib.load('src/question_selector_model.pkl')
-
-# Function to dynamically select the best question
-def dynamic_question_selection(characters):
-  import pandas as pd
-import joblib
 
 # Load the trained model
 model = joblib.load('src/question_selector_model.pkl')
@@ -45,11 +41,11 @@ def dynamic_question_selection(characters):
     print(f"Selected Trait: {most_effective_trait}")
     return most_effective_trait
 
+
 # Main game loop
 def play_game():
-    """
-    Implements the gameplay logic.
-    """
+    data = load_character_data()
+    questions = list(data.columns[1:])
     characters = fetch_all_characters()
     if not characters:
         print("No characters were loaded from the database.")
@@ -57,7 +53,8 @@ def play_game():
 
     while len(characters) > 1:
         trait = dynamic_question_selection(characters)
-        print(f"Is the character {trait}? (yes/no)")
+        for question in questions:
+            print(f"Is the character {question.replace('_', ' ')}? (yes/no)")
         answer = input().strip().lower()
 
         if answer == 'yes':
