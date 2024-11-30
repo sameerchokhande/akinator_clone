@@ -1,0 +1,14 @@
+character_name,traits,category
+Mahatma Gandhi,"['is_male', 'is_freedom_fighter', 'is_non-violent', 'is_humble', 'is_selfless', 'is_truthful', 'is_brave']",Freedom Fighter
+Rabindranath Tagore,"['is_male', 'is_artist', 'is_writer', 'is_painter', 'is_nobel_prize_winner', 'is_social_reformer', 'is_musician']",Artist
+Dr. APJ Abdul Kalam,"['is_male', 'is_scientist', 'is_11th_president_of_india', 'is_missile_man_of_india', 'is_visionary_leader']",Scientists
+Sardar Vallabhbhai Patel,"['is_male', 'is_freedom_fighter', 'is_activist', 'is_politician', 'is_iron_man_of_india', 'is_barrister']",Freedom fighter
+Sachin Tendulkar,"['is_male', 'is_cricketer', 'is_god_of_cricket', 'is_little_master', 'is_debut_at_15_in_1989', 'is_right-handed_batsman', 'has_100_international_centuries']",Cricketer
+Indira Gandhi,"['is_female', 'is_politician', 'is_iron_lady', 'is_female_prime_minister', 'is_prime_minister_of_india']",Politician
+Amitabh Bachchan,"['is_male', 'is_actor', 'is_big_b', 'acted_in_agneepath_1990', 'acted_in_black_2005', 'acted_in_paa_2009', 'acted_in_piku_2015', 'acted_in_badla_2019', 'married_to_jaya_bhaduri']",Actors
+Milkha Singh,"['is_male', 'is_athlete', 'won_gold_in_400_meter_race', 'received_padma_shri_1959', 'is_flying_sikh']",Athletics
+Mary Kom,"['is_female', 'is_boxer', 'is_six-time_world_amateur_boxing_champion', 'is_indian_boxer', 'is_first_indian_woman_to_win_gold_asian_games', 'is_first_indian_woman_to_win_gold_commonwealth_games']",Boxing
+Vishwanathan Anand,"['is_male', 'is_chess_player', 'is_five-time_world_chess_champion', 'is_two-time_chess_world_cup_champion', 'is_india_first_international_grandmaster', 'is_deputy_president_of_fide']",Chess
+P. T. Usha,"['is_female', 'is_athlete', 'is_payyoli_express', 'is_queen_of_indian_track_and_field', 'won_23_medals_asian_track_field_events', 'won_14_gold_medals']",Athletics
+Sunil Chhetri,"['is_male', 'is_footballer', 'is_captain_fantastic', 'won_aiff_player_of_the_year_six_times', 'won_afc_challenge_cup', 'won_saff_championship', 'won_nehru_cup', 'won_intercontinental_cup']",Football
+Kapil Dev,"['is_male', 'is_cricketer', 'is_greatest_all_rounder', 'took_400_plus_test_wickets', 'scored_5000_plus_test_runs', 'received_padma_shri_1982']",Cricketer

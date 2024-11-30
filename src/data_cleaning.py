@@ -1,7 +1,7 @@
 import pandas as pd 
 
 #load the data file form processing
-data_file = pd.read_csv('./data/row_data.csv')
+data_file = pd.read_csv('./data/book1.csv')
 
 #step1 handle the missing value
 data_file.fillna('', inplace=True)
