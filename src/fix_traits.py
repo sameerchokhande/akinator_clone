@@ -1,36 +1,37 @@
 import json
-from sqlalchemy import create_engine
-from sqlalchemy.sql import text
+from sqlalchemy import create_engine, text
 
-# Database connection
-engine = create_engine('mysql+pymysql://root:200103@localhost:3306/akinator')
+# Database connection URI for MySQL
+DATABASE_URI = 'mysql+mysqlconnector://root:200103@localhost:3306/akinator'
+engine = create_engine(DATABASE_URI)
 
-import re
-
-def fix_invalid_json(traits):
-    # Replace single quotes with double quotes and add commas if necessary
-    traits = traits.replace("'", '"')
-    traits = re.sub(r'"\s+"', '", "', traits)  # Fix missing commas
-    return traits
-
-def fix_traits():
-    query_select = text("SELECT id, traits FROM person")
-    query_update = text("UPDATE person SET traits = :traits WHERE id = :id")
-
+def clean_and_fix_traits():
+    """
+    Fix the traits in the database to ensure consistent JSON array format.
+    """
     with engine.connect() as connection:
-        result = connection.execute(query_select).fetchall()
+        # Fetch all records
+        result = connection.execute(text("SELECT id, traits FROM person")).fetchall()
+        
         for row in result:
-            id = row[0]
-            raw_traits = row[1]
+            record_id, raw_traits = row
             try:
-                # Fix and parse traits
-                cleaned_traits = fix_invalid_json(raw_traits.strip())
-                clean_traits = json.loads(cleaned_traits)
-                connection.execute(query_update, {"id": id, "traits": json.dumps(clean_traits)})
+                # Attempt to parse the current traits
+                traits = json.loads(raw_traits)
+                if not isinstance(traits, list):
+                    raise ValueError("Traits must be a list.")
+                # Re-encode to ensure JSON format
+                clean_traits = json.dumps(traits)
             except Exception as e:
-                print(f"Error cleaning traits for ID {id}: {e}")
-                print(f"Raw traits: {raw_traits}")
+                print(f"Error cleaning traits for ID {record_id}: {raw_traits} - {e}")
+                clean_traits = "[]"  # Default to an empty list on error
 
-fix_traits()
+            # Update the database with cleaned traits
+            connection.execute(
+                text("UPDATE person SET traits = :clean_traits WHERE id = :id"),
+                {"clean_traits": clean_traits, "id": record_id}
+            )
+        connection.commit()
 
-
+clean_and_fix_traits()
+print("Database traits have been cleaned and standardized.")

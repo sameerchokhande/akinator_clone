@@ -24,6 +24,6 @@ data_file.drop_duplicates(inplace=True)
 data_file['traits'] = data_file['traits'].apply(lambda x: x.split(',') if isinstance(x, str) else x)
 
 #save clean data to the file
-data_file.to_csv('./data/cleaned_data.csv', index=False )
+data_file.to_csv('./data/cleaned_data.csv', index=True )
 
 print("Data cleaing are done and store to the clean data file succesfully ")
