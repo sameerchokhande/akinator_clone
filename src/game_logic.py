@@ -8,7 +8,7 @@ model = joblib.load('src/question_selector_model.pkl')
 
 def dynamic_question_selection(characters):
     # Define characters or patterns to ignore
-    ignore = ['"', "'", "question", ]  # Add any unwanted symbols here
+    ignore = ['"', "'", "question_" ]  # Add any unwanted symbols here
 
     all_traits = set()
     for char in characters:
